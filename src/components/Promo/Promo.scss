@@ -1,0 +1,19 @@
+@import '../../vendor/styles/variables.scss';
+
+.promo {
+  background-color: $main-background;
+  min-height: 635px;
+  width: 100%;
+  display: flex;
+  padding: 0 70px;
+
+  &__header {
+    margin-top: 125px;
+    max-width: 625px;
+    margin-right: auto;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 52px;
+    color: #ffff;
+  }
+}
