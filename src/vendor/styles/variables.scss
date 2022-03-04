@@ -1,1 +1,17 @@
-$main-background: #465DFF;
+$colors-landing-2: #465DFF;
+$colors-main-1: #2BE080;
+$colors-white: #FFFF;
+$colors-font-main: #000000;
+$colors-font-2: #A0A0A0;
+$colors-landing-5: #F2F2F2;
+$colors-landing-4: #F5F5F5;
+$colors-landing-icon-1: #E8E8E8;
+
+@mixin button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}

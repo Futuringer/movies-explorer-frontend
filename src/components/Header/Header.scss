@@ -1,0 +1,37 @@
+@import '../../vendor/styles/variables.scss';
+
+.header {
+  padding: 18px 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__icon {
+    box-sizing: content-box;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 10px solid $colors-main-1;
+  }
+
+  &__buttons-container {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__button {
+    @include button;
+    color: $colors-white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 20px;
+    background-color: transparent;
+    border-radius: 3px;
+
+    &:focus {
+      background-color: $colors-main-1;
+      color: $colors-font-main;
+    }
+  }
+}

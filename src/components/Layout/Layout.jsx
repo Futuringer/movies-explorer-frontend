@@ -8,12 +8,14 @@ import styles from './Layout.scss';
 
 function Layout() {
   return (
-    <div className='Layout'>
-      <div className='Layout__header'><Header /></div>
-      <div className='Layout__content'>
+    <div className="layout">
+      <div className="layout__header">
+        <Header />
+      </div>
+      <div className="layout__content">
         <Outlet />
       </div>
-      <div className='Layout__footer'>Footer</div>
+      <div className="layout__footer">Footer</div>
     </div>
   );
 }
