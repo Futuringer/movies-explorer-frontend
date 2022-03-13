@@ -4,7 +4,7 @@ import styles from './AboutProject.scss';
 
 function AboutProject() {
   return (
-    <section className="section about">
+    <section className="about">
     <h2 className="about__header">О проекте</h2>
     <div className="about__description-container">
       <div>
@@ -26,7 +26,7 @@ function AboutProject() {
         </p>
       </div>
     </div>
-    <grid className="about__stages-bar">
+    <div className="about__stages-bar">
       <div className="about__stage about__stage_filled">1 неделя</div>
       <div className="about__stage">4 недели</div>
       <div>
@@ -35,7 +35,7 @@ function AboutProject() {
       <div>
         <p className="about__stage-text">Front-end</p>
       </div>
-    </grid>
+    </div>
   </section >
   );
 }

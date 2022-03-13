@@ -1,21 +1,22 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
-import cn from 'classnames';
 
 import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 
 import styles from './Layout.scss';
 
-function Layout() {
+function Layout({ noFooter, children, ...restProps }) {
   return (
     <div className="layout">
       <div className="layout__header">
-        <Header />
+        <Header {...restProps} />
       </div>
-      <div className="layout__content">
-        <Outlet />
-      </div>
-      <div className="layout__footer">Footer</div>
+      <div className="layout__content">{children}</div>
+      {!noFooter && (
+        <div className="layout__footer">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }
