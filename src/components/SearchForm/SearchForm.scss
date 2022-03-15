@@ -74,6 +74,7 @@
     }
     &:focus {
       outline: none;
+      border: 1px solid $colors-main-2;
     }
 
     @media screen and (max-width: 600px) {

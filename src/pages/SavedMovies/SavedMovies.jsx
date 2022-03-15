@@ -8,7 +8,7 @@ function SavedMovies({ loggedIn, openPopup, ...restProps }) {
     <Layout loggedIn={loggedIn} openPopup={openPopup}>
       <div className="movies__container">
         <SearchForm></SearchForm>
-        <MoviesCardList {...restProps}></MoviesCardList>
+        <MoviesCardList isSavedMovies {...restProps}></MoviesCardList>
       </div>
     </Layout>
   );

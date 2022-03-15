@@ -30,7 +30,10 @@ export const cards = [
 ];
 
 export const savedCards = [
-  { id:'1', image: card1, title: '33 слова о дизайне', duration: '1ч 47м' },
+
   { id:'3', image: card2, title: 'Киноальманах «100 лет дизайна»', duration: '1ч 3м' },
   { id:'4', image: card3, title: 'В погоне за Бенкси', duration: '1ч 42м' },
+  { id:'5', image: card4, title: 'Баския: Взрыв реальности', duration: '1ч 21м' },
+  { id:'6', image: card5, title: 'Бег это свобода', duration: '1ч 44м' },
+  { id:'7', image: card6, title: 'Книготорговцы', duration: '1ч 37м' },
 ];
