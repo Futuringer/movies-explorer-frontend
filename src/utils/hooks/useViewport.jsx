@@ -2,35 +2,37 @@ import { useState, useEffect } from 'react';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
-  let rows;
+  let cardsToLoad;
+  let initialNumberOfCards;
 
   switch (true) {
     case width > 768:
-      rows = 3;
+      cardsToLoad = 3;
+      initialNumberOfCards = 12;
       break;
     case  width <= 320:
-      rows = 1;
+      cardsToLoad = 2;
+      initialNumberOfCards = 5;
       break;
     default:
-      rows = 2;
+      cardsToLoad = 2;
+      initialNumberOfCards = 8;
   }
 
-  return {
-    rows,
-  };
+  return [initialNumberOfCards, cardsToLoad]
 }
 
 export default function useViewport() {
-  const [rows, setRows] = useState(getWindowDimensions());
+  const [cardsSetings, setCardsSetings] = useState(getWindowDimensions());
 
   useEffect(() => {
     function handleResize() {
-      setRows(getWindowDimensions());
+      setCardsSetings(getWindowDimensions());
     }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  return rows;
+  return cardsSetings;
 }

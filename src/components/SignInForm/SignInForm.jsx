@@ -1,20 +1,63 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
+import { LINKS } from '../../utils/constants';
+import api from '../../utils/api/MainApi';
 import FormInput from '../FormInput/FormInput';
 import HeaderLogo from '../HeaderLogo/HeaderLogo.jsx';
 import EntranceButtons from '../EntranceButtons/EntranceButtons';
 
 import styles from './SignInForm.scss';
 
-function SignInForm() {
-  const [values, setValues] = useState({ name: '', email: '', password: '' });
-  const setValue = (field, value) => {
-    setValues({ ...values, [field]: value });
-  };
+function SignInForm({ setLoggedIn, setActualUser }) {
+  const navigate = useNavigate();
+  const [apiError, setApiError] = useState('');
+  const initialValues = { email: '', password: '' };
+  const ValidationSchema = Yup.object().shape({
+    email: Yup.string().email('Некорректный email').required('Это поле обязательно').nullable(),
+    password: Yup.string().required('Это поле обязательно').nullable(),
+  });
+  const formik = useFormik({
+    initialValues: { initialValues },
+    validationSchema: ValidationSchema,
+    onSubmit: (values) => {
+      const { email, password } = values;
+      api
+        .login({ email: email, password: password })
+        .then((res) => {
+          console.log('SA', res);
+          setLoggedIn(true);
+          navigate(LINKS.MOVIES);
+          return api
+            .getMyInfo()
+            .then((res) => {
+              setActualUser(res);
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          setApiError(err?.split('"')[1]);
+        });
+    },
+  });
+  const { values, handleSubmit, errors, setFieldValue } = formik;
+
+  const resetErrors = useCallback(() => {
+    setApiError('');
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('click', resetErrors);
+    return () => {
+      document.removeEventListener('click', resetErrors);
+    };
+  }, [resetErrors]);
 
   return (
-    <form className="sign-in-form">
+    <form className="sign-in-form" onSubmit={handleSubmit}>
       <div className="sign-in-form__logo">
         <HeaderLogo />
       </div>
@@ -25,10 +68,10 @@ function SignInForm() {
             name="email"
             label="E-mail"
             placeholder="Введите E-mail"
-            value={values.email}
+            value={values.email || initialValues.email}
             required
-            setValue={setValue}
-            type="email"
+            setValue={setFieldValue}
+            error={errors.email}
           ></FormInput>
         </div>
         <div className="sign-in-form__input-container">
@@ -36,19 +79,22 @@ function SignInForm() {
             name="password"
             label="Пароль"
             placeholder="Введите пароль"
-            value={values.password}
+            value={values.password || initialValues.password}
             required
-            setValue={setValue}
+            setValue={setFieldValue}
             type="password"
+            error={errors.password}
           ></FormInput>
         </div>
       </div>
       <div className="sign-in-form__entrance-buttons">
+        {apiError && <div className="sign-in-form__form-error">{apiError}</div>}
         <EntranceButtons
           mainText="Войти"
           descText="Ещё не зарегистрированы?"
           secondaryText="Регистрация"
           link="/signup"
+          disabled={!formik.isValid}
         ></EntranceButtons>
       </div>
     </form>

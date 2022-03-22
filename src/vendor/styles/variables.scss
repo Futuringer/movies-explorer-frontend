@@ -22,6 +22,12 @@ $colors-controller-main: #EBEBEB;
   &:hover {
     opacity: 0.8;
   }
+
+  &:disabled {
+    pointer-events: none;
+    background-color: $colors-border-main;
+    opacity: 0.3;
+  }
 }
 
 @mixin opacity {

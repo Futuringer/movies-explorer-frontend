@@ -2,10 +2,10 @@ import SignUpForm from '../../components/SignUpForm/SignUpForm';
 
 import styles from './Register.scss';
 
-function Register({ loggedIn, ...restProps }) {
+function Register({ ...restProps }) {
   return (
     <div className="register__container">
-      <SignUpForm></SignUpForm>
+      <SignUpForm {...restProps}></SignUpForm>
     </div>
   );
 }

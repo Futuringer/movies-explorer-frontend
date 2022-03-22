@@ -2,10 +2,10 @@ import SignInForm from '../../components/SignInForm/SignInForm';
 
 import styles from './Login.scss';
 
-function Login({ loggedIn, ...restProps }) {
+function Login({ ...restProps }) {
   return (
     <div className="register__container">
-      <SignInForm></SignInForm>
+      <SignInForm {...restProps}></SignInForm>
     </div>
   );
 }
