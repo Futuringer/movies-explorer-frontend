@@ -75,4 +75,12 @@
     bottom: 60px;
     color: $colors-main-3;
   }
+
+  &__form-success {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    bottom: 60px;
+    color: $colors-main-1;
+  }
 }

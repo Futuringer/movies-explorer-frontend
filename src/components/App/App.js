@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { LINKS } from '../../utils/constants';
 import api from '../../utils/api/MainApi';
 
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Main from '../../pages/Main/Main';
 import Movies from '../../pages/Movies/Movies';
 import SavedMovies from '../../pages/SavedMovies/SavedMovies';
@@ -22,7 +23,7 @@ function App() {
   const [moviesToShow, setMoviesToShow] = useState([]);
   const [fetchMoviesError, setFetchMoviesError] = useState(false);
   const [actualUser, setActualUser] = useState({});
-  const [loggedIn, setLoggedIn] = useState('false');
+  const [loggedIn, setLoggedIn] = useState(false);
   const [savedMovies, setSavedMovies] = useState([]);
 
   const handleCloseMenuPopup = () => {
@@ -36,6 +37,7 @@ function App() {
   const handleLogout = () => {
     navigate(LINKS.MAIN);
     localStorage.clear();
+    setLoggedIn(false);
     api.logout().catch((err) => {
       console.log(err);
     });
@@ -70,42 +72,63 @@ function App() {
       setSavedMovies(savedMovies);
     }
   }, []);
-  
+
   return (
     <CurrentUserContext.Provider value={actualUser}>
       <Routes>
         <Route exact path={'*'} element={<NotFound />}></Route>
-        <Route exact path={LINKS.MAIN} element={<Main openPopup={handleOpenMenuPopup} />}></Route>
         <Route
-          path={LINKS.MOVIES}
+          exact
+          path={LINKS.MAIN}
+          element={<Main openPopup={handleOpenMenuPopup} loggedIn={loggedIn} />}
+        ></Route>
+
+        <Route path={LINKS.MOVIES} element={<ProtectedRoute loggedIn={loggedIn} />}>
+          <Route
+            path={LINKS.MOVIES}
+            element={
+              <Movies
+                loggedIn={loggedIn}
+                movies={movies}
+                openPopup={handleOpenMenuPopup}
+                setMovies={setMovies} //все фильмы несортированные
+                moviesToShow={moviesToShow}
+                setMoviesToShow={setMoviesToShow}
+                savedMovies={savedMovies}
+                setSavedMovies={setSavedMovies}
+              />
+            }
+          ></Route>
+        </Route>
+
+        <Route path={LINKS.SAVED_MOVIES} element={<ProtectedRoute loggedIn={loggedIn} />}>
+          <Route
+            path={LINKS.SAVED_MOVIES}
+            element={
+              <SavedMovies
+                loggedIn={loggedIn}
+                moviesToShow={savedMovies}
+                isSaved
+                openPopup={handleOpenMenuPopup}
+                savedMovies={savedMovies}
+                setSavedMovies={setSavedMovies}
+              />
+            }
+          ></Route>
+        </Route>
+          
+        <Route
+          path={LINKS.PROFILE}
           element={
-            <Movies
-              loggedIn
-              movies={movies}
+            <Profile
+              loggedIn={loggedIn}
               openPopup={handleOpenMenuPopup}
-              setMovies={setMovies} //все фильмы несортированные
-              fetchMoviesError={fetchMoviesError}
-              setFetchMoviesError={setFetchMoviesError}
-              moviesToShow={moviesToShow}
-              setMoviesToShow={setMoviesToShow}
-              savedMovies={savedMovies}
-              setSavedMovies={setSavedMovies}
+              handleLogout={handleLogout}
+              setActualUser={setActualUser}
             />
           }
         ></Route>
-        <Route
-          path={LINKS.SAVED_MOVIES}
-          element={
-            <SavedMovies
-              loggedIn
-              moviesToShow={savedMovies}
-              isSaved
-              openPopup={handleOpenMenuPopup}
-              savedMovies={savedMovies}
-              setSavedMovies={setSavedMovies}
-            />
-          }
-        ></Route>
+
         <Route
           path={LINKS.SIGN_UP}
           element={<Register setLoggedIn={setLoggedIn} setActualUser={setActualUser} />}
@@ -113,17 +136,6 @@ function App() {
         <Route
           path={LINKS.SIGN_IN}
           element={<Login setLoggedIn={setLoggedIn} setActualUser={setActualUser} />}
-        ></Route>
-        <Route
-          path={LINKS.PROFILE}
-          element={
-            <Profile
-              loggedIn
-              openPopup={handleOpenMenuPopup}
-              handleLogout={handleLogout}
-              setActualUser={setActualUser}
-            />
-          }
         ></Route>
       </Routes>
       <NavigationPopup isOpen={menuPopupIsOpen} closeMenu={handleCloseMenuPopup}></NavigationPopup>

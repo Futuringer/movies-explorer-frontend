@@ -17,10 +17,15 @@ function MoviesCardList({
 }) {
   let [initialNumberOfCards, cardsToLoad] = useViewport();
   const [cardsToShow, setCardsToShow] = useState(initialNumberOfCards);
-
   const handleMoreClick = () => {
     setCardsToShow(cardsToShow + (cardsToLoad - ((cardsToShow + cardsToLoad) % cardsToLoad))); //если поменяли экран то сначала догружаем до ровной строки
   };
+
+  useEffect(()=>{
+    if (isSavedMovies) {
+      setCardsToShow(moviesToShow.length);
+    }
+  },[])
 
   return (
     <div className="cards">
@@ -45,7 +50,7 @@ function MoviesCardList({
         <div className="cards__no-films">Фильмы не найдены</div>
       )}
 
-      {moviesToShow?.length > cardsToShow && (
+      {!isSavedMovies && moviesToShow?.length > cardsToShow && (
         <button className="cards__button" onClick={handleMoreClick}>
           Ещё
         </button>

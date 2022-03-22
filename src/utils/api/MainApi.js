@@ -1,6 +1,9 @@
 //НАШ API
 class Api {
-  constructor({ baseUrl, headers }) {
+  constructor({
+    baseUrl,
+    headers
+  }) {
     this._baseUrl = baseUrl;
     this._headers = headers;
   }
@@ -17,12 +20,25 @@ class Api {
       }),
     }).then((res) => this._handleRegisterResponse(res));
   }
-  
+
   getMyInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers,
       credentials: 'include',
     }).then((res) => this._handleResponse(res));
+  }
+
+  changeMyInfo(data) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      headers: this._headers,
+      method: 'PATCH',
+      credentials: 'include',
+      body: JSON.stringify({
+        name: data.name,
+        password: data.password,
+        email: data.email,
+      }),
+    }).then((res) => this._handleRegisterResponse(res));
   }
 
   login(data) {
@@ -90,14 +106,18 @@ class Api {
     if (res.ok) {
       return res.text();
     }
-    return res.json().then(res => {throw (JSON.stringify(res.message))})
+    return res.json().then(res => {
+      throw (JSON.stringify(res.message))
+    })
   }
 
   _handleRegisterResponse(res) {
     if (res.ok) {
       return res.json();
     }
-    return res.json().then(res => {throw (JSON.stringify(res.message))})
+    return res.json().then(res => {
+      throw (JSON.stringify(res.message))
+    })
   }
 
 }

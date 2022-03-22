@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useCallback } from 'react';
+import React, { useContext, useEffect, useCallback, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { useState } from 'react';
+import api from '../../utils/api/MainApi';
 import ProfileInput from '../ProfileInput/ProfileInput';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
@@ -10,8 +10,8 @@ import styles from './ProfileForm.scss';
 
 function ProfileForm({ setActualUser, handleLogout }) {
   const currentUser = useContext(CurrentUserContext);
-  const [initialData, setInitialData] = useState(currentUser);
   const [apiError, setApiError] = useState('');
+  const [successStatus, setSuccessStatus] = useState('');
 
   const initialValues = { name: currentUser.name, email: currentUser.email };
   const ValidationSchema = Yup.object().shape({
@@ -24,14 +24,14 @@ function ProfileForm({ setActualUser, handleLogout }) {
   const formik = useFormik({
     initialValues: { initialValues },
     validationSchema: ValidationSchema,
-    onSubmit: () => {
+    onSubmit: (e) => {
+      console.log('submit');
       const { name, email } = values;
       api
-        .register({ name: name, email: email })
+        .changeMyInfo({ name: name, email: email })
         .then((res) => {
-          setLoggedIn(true);
-          navigate(LINKS.MOVIES);
-          return api.login({ email: email, password: password });
+          setSuccessStatus('Данные успешно обновлены');
+          setActualUser({ name: name, email: email });
         })
         .catch((err) => {
           setApiError(err?.split('"')[1]);
@@ -45,19 +45,20 @@ function ProfileForm({ setActualUser, handleLogout }) {
     setFieldValue('email', initialValues.email);
   }, [currentUser]);
 
-  const resetErrors = useCallback(() => {
+  const resetMessages = useCallback(() => {
     setApiError('');
+    setSuccessStatus('');
   }, []);
 
   useEffect(() => {
-    document.addEventListener('click', resetErrors);
+    document.addEventListener('click', resetMessages);
     return () => {
-      document.removeEventListener('click', resetErrors);
+      document.removeEventListener('click', resetMessages);
     };
-  }, [resetErrors]);
+  }, [resetMessages]);
 
   return (
-    <form className="profile-form">
+    <form className="profile-form" onSubmit={handleSubmit}>
       <div>
         <h1 className="profile-form__header">Привет, {currentUser.name}</h1>
         <div className="profile-form__inputs-container">
@@ -90,7 +91,9 @@ function ProfileForm({ setActualUser, handleLogout }) {
       </div>
       <div className="profile-form__entrance-buttons">
         {apiError && <div className="profile-form__form-error">{apiError}</div>}
+        {successStatus && <div className="profile-form__form-success">{successStatus}</div>}
         <button
+        type='submit'
           disabled={
             !formik.isValid ||
             (values.name === initialValues.name && values.email === initialValues.email)
