@@ -33,7 +33,6 @@ function MoviesCardList({
           setSavedMovies(savedMoviesList);
           setMoviesToShow(savedMoviesList);
           setCardsToShow(savedMoviesList.length);
-          console.log(savedMoviesList);
         })
         .catch((err) => {
           console.log(err);

@@ -52,7 +52,6 @@ function SearchForm({
   };
 
   const searchInSavedMovies = () => {
-    console.log(movies);
     setMoviesToShow(moviesFilterer(movies, searchValue, shortFilmChecked));
   };
 
@@ -79,7 +78,6 @@ function SearchForm({
         const filteredMovies = moviesFilterer(movies, searchValue, shortFilmChecked);
         localStorage.setItem('moviesToShow', JSON.stringify(filteredMovies));
         setMoviesToShow(filteredMovies);
-        console.log('filter', filteredMovies);
       }
     }
   };

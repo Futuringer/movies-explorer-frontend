@@ -58,7 +58,6 @@ function App() {
     const moviesToShow = JSON.parse(localStorage.getItem('moviesToShow'));
     const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
     if (movies?.length) {
-      console.log(movies);
       setMovies(movies);
       setMoviesToShow(moviesToShow);
       setSavedMovies(savedMovies);
@@ -68,10 +67,14 @@ function App() {
   return (
     <CurrentUserContext.Provider value={actualUser}>
       <Routes>
-        <Route exact path={'*'} element={<NotFound setLoggedIn={setLoggedIn} />}></Route>
-        <Route exact path={LINKS.MAIN} element={<Main openPopup={handleOpenMenuPopup} />}></Route>
+        <Route exact path={'*'}  element={<NotFound loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}></Route>
+        <Route
+          exact
+          path={LINKS.MAIN}
+          element={<Main openPopup={handleOpenMenuPopup} loggedIn={loggedIn} />}
+        ></Route>
 
-        <Route path={LINKS.MOVIES} element={<ProtectedRoute />}>
+        <Route path={LINKS.MOVIES} element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route
             path={LINKS.MOVIES}
             element={
@@ -91,7 +94,7 @@ function App() {
           ></Route>
         </Route>
 
-        <Route path={LINKS.SAVED_MOVIES} element={<ProtectedRoute />}>
+        <Route path={LINKS.SAVED_MOVIES} element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route
             path={LINKS.SAVED_MOVIES}
             element={
@@ -108,7 +111,7 @@ function App() {
             }
           ></Route>
         </Route>
-
+          
         <Route
           path={LINKS.PROFILE}
           element={
