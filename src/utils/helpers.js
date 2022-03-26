@@ -5,15 +5,14 @@ export const durationParser = (minutes) => {
 export const moviesFilterer = (movies, search, shortFilms) => {
   const filteredMovies = [];
   movies.forEach((movie) => {
-    const allTextFieldsArray = `${movie.country} ${movie.description} ${movie.director} ${movie.nameEN} ${movie.nameRU}`;
-    if (allTextFieldsArray.includes(search)) {
+    const allTextFieldsArray = `${movie.country} ${movie.description} ${movie.director} ${movie.nameEN} ${movie.nameRU}`.toLowerCase();
+    if (allTextFieldsArray.includes(search.toLowerCase())) {
       if ((shortFilms && movie.duration > 40) || !shortFilms) {
         filteredMovies.push(movie);
       }
     }
   });
 
-  console.log(filteredMovies);
   return filteredMovies;
 };
 

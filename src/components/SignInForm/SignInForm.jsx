@@ -28,8 +28,8 @@ function SignInForm({ setLoggedIn, setActualUser }) {
       api
         .login({ email: email, password: password })
         .then((res) => {
-          console.log('SA', res);
           setLoggedIn(true);
+          localStorage.setItem('loggedIn', JSON.stringify(true));
           navigate(LINKS.MOVIES);
           return api
             .getMyInfo()

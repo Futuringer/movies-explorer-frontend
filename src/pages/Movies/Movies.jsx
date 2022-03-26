@@ -1,8 +1,7 @@
 import Layout from '../../components/Layout/Layout';
-import React, { useEffect, Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import SearchForm from '../../components/SearchForm/SearchForm';
 import Preloader from '../../components/Preloader/Preloader';
-import moviesApi from '../../utils/api/MoviesApi';
 
 import styles from './Movies.scss';
 
@@ -11,12 +10,11 @@ function Movies({
   loggedIn,
   openPopup,
   setMovies,
-  //setFetchMoviesError,
+  setFetchMoviesError,
   setMoviesToShow,
   ...restProps
 }) {
   const MoviesCardList = React.lazy(() => import('../../components/MoviesCardList/MoviesCardList'));
-  const [fetchMoviesError, setFetchMoviesError] = useState('');
 
   return (
       <Layout loggedIn={loggedIn} openPopup={openPopup}>
@@ -28,7 +26,7 @@ function Movies({
             setFetchMoviesError={setFetchMoviesError}
           ></SearchForm>
             <Suspense fallback={<Preloader />}>
-              {<MoviesCardList movies={movies} setMoviesToShow={setMoviesToShow} fetchMoviesError={fetchMoviesError} {...restProps} />}
+              {<MoviesCardList movies={movies} setMoviesToShow={setMoviesToShow} {...restProps} />}
             </Suspense>
         </div>
       </Layout>

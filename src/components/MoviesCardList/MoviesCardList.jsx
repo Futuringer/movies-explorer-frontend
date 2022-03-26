@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
+import api from '../../utils/api/MainApi';
 import useViewport from '../../utils/hooks/useViewport';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { durationParser } from '../../utils/helpers';
@@ -13,6 +14,7 @@ function MoviesCardList({
   isSavedMovies,
   fetchMoviesError,
   setMoviesToShow,
+  setSavedMovies,
   ...restProps
 }) {
   let [initialNumberOfCards, cardsToLoad] = useViewport();
@@ -21,11 +23,23 @@ function MoviesCardList({
     setCardsToShow(cardsToShow + (cardsToLoad - ((cardsToShow + cardsToLoad) % cardsToLoad))); //если поменяли экран то сначала догружаем до ровной строки
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (isSavedMovies) {
-      setCardsToShow(moviesToShow.length);
+      api
+        .getMovies()
+        .then((res) => {
+          const savedMoviesList = res?.data;
+          localStorage.setItem('savedMovies', JSON.stringify(savedMoviesList));
+          setSavedMovies(savedMoviesList);
+          setMoviesToShow(savedMoviesList);
+          setCardsToShow(savedMoviesList.length);
+          console.log(savedMoviesList);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  },[])
+  }, []);
 
   return (
     <div className="cards">
@@ -40,12 +54,14 @@ function MoviesCardList({
             <MoviesCard
               key={id}
               movie={movie}
+              setSavedMovies={setSavedMovies}
+              setMoviesToShow={setMoviesToShow}
               {...restProps}
             ></MoviesCard>
           ))}
         </div>
       ) : isSavedMovies ? (
-        <div className="cards__no-films">У вас еще нет сохраненных фильмов</div>
+        <div className="cards__no-films">Фильмы не найдены</div>
       ) : (
         <div className="cards__no-films">Фильмы не найдены</div>
       )}

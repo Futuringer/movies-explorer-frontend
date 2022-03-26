@@ -25,7 +25,6 @@ function ProfileForm({ setActualUser, handleLogout }) {
     initialValues: { initialValues },
     validationSchema: ValidationSchema,
     onSubmit: (e) => {
-      console.log('submit');
       const { name, email } = values;
       api
         .changeMyInfo({ name: name, email: email })
@@ -34,6 +33,7 @@ function ProfileForm({ setActualUser, handleLogout }) {
           setActualUser({ name: name, email: email });
         })
         .catch((err) => {
+          console.log(err);
           setApiError(err?.split('"')[1]);
         });
     },

@@ -34,6 +34,7 @@ function SignUpForm({ setLoggedIn, setActualUser }) {
         .register({ name: name, email: email, password: password })
         .then((res) => {
           setLoggedIn(true);
+          localStorage.setItem('loggedIn', JSON.stringify(true));
           navigate(LINKS.MOVIES);
           return api
             .login({ email: email, password: password })

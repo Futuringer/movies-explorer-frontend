@@ -6,9 +6,17 @@ import SearchForm from '../../components/SearchForm/SearchForm';
 import MoviesCardList from '../../components/MoviesCardList/MoviesCardList';
 import styles from './SavedMovies.scss';
 
-function SavedMovies({ loggedIn, openPopup, setSavedMovies, moviesToShow,...restProps }) {
+function SavedMovies({
+  loggedIn,
+  openPopup,
+  setSavedMovies,
+  moviesToShow,
+  movies,
+  setMoviesToShow,
+  ...restProps
+}) {
   useEffect(() => {
-    api.getMovies().then((res)=>{
+    api.getMovies().then((res) => {
       setSavedMovies(res.data);
     });
   }, []);
@@ -16,8 +24,19 @@ function SavedMovies({ loggedIn, openPopup, setSavedMovies, moviesToShow,...rest
   return (
     <Layout loggedIn={loggedIn} openPopup={openPopup}>
       <div className="movies__container">
-        <SearchForm isSavedMovies movies={moviesToShow} setSavedMovies={setSavedMovies}></SearchForm>
-        <MoviesCardList isSavedMovies setSavedMovies={setSavedMovies} moviesToShow={moviesToShow}{...restProps}></MoviesCardList>
+        <SearchForm
+          isSavedMovies
+          movies={movies}
+          setSavedMovies={setSavedMovies}
+          setMoviesToShow={setMoviesToShow}
+        ></SearchForm>
+        <MoviesCardList
+          isSavedMovies
+          setSavedMovies={setSavedMovies}
+          moviesToShow={moviesToShow}
+          setMoviesToShow={setMoviesToShow}
+          {...restProps}
+        ></MoviesCardList>
       </div>
     </Layout>
   );

@@ -38,6 +38,7 @@ function App() {
     navigate(LINKS.MAIN);
     localStorage.clear();
     setLoggedIn(false);
+    localStorage.setItem('loggedIn', JSON.stringify(false));
     api.logout().catch((err) => {
       console.log(err);
     });
@@ -49,26 +50,17 @@ function App() {
       .then((res) => {
         setActualUser(res);
         setLoggedIn(true);
+        localStorage.setItem('loggedIn', JSON.stringify(true));
       })
       .catch((err) => {});
 
-    api
-      .getMovies()
-      .then((res) => {
-        const savedMoviesList = res?.data;
-        localStorage.setItem('savedMovies', JSON.stringify(savedMoviesList));
-        setSavedMovies(savedMoviesList);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
     const movies = JSON.parse(localStorage.getItem('movies'));
+    const moviesToShow = JSON.parse(localStorage.getItem('moviesToShow'));
     const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
     if (movies?.length) {
       console.log(movies);
       setMovies(movies);
-      setMoviesToShow(movies);
+      setMoviesToShow(moviesToShow);
       setSavedMovies(savedMovies);
     }
   }, []);
@@ -76,14 +68,10 @@ function App() {
   return (
     <CurrentUserContext.Provider value={actualUser}>
       <Routes>
-        <Route exact path={'*'} element={<NotFound />}></Route>
-        <Route
-          exact
-          path={LINKS.MAIN}
-          element={<Main openPopup={handleOpenMenuPopup} loggedIn={loggedIn} />}
-        ></Route>
+        <Route exact path={'*'} element={<NotFound setLoggedIn={setLoggedIn} />}></Route>
+        <Route exact path={LINKS.MAIN} element={<Main openPopup={handleOpenMenuPopup} />}></Route>
 
-        <Route path={LINKS.MOVIES} element={<ProtectedRoute loggedIn={loggedIn} />}>
+        <Route path={LINKS.MOVIES} element={<ProtectedRoute />}>
           <Route
             path={LINKS.MOVIES}
             element={
@@ -96,27 +84,31 @@ function App() {
                 setMoviesToShow={setMoviesToShow}
                 savedMovies={savedMovies}
                 setSavedMovies={setSavedMovies}
+                fetchMoviesError={fetchMoviesError}
+                setFetchMoviesError={setFetchMoviesError}
               />
             }
           ></Route>
         </Route>
 
-        <Route path={LINKS.SAVED_MOVIES} element={<ProtectedRoute loggedIn={loggedIn} />}>
+        <Route path={LINKS.SAVED_MOVIES} element={<ProtectedRoute />}>
           <Route
             path={LINKS.SAVED_MOVIES}
             element={
               <SavedMovies
                 loggedIn={loggedIn}
-                moviesToShow={savedMovies}
+                movies={savedMovies}
+                moviesToShow={moviesToShow}
                 isSaved
                 openPopup={handleOpenMenuPopup}
                 savedMovies={savedMovies}
                 setSavedMovies={setSavedMovies}
+                setMoviesToShow={setMoviesToShow}
               />
             }
           ></Route>
         </Route>
-          
+
         <Route
           path={LINKS.PROFILE}
           element={

@@ -7,6 +7,7 @@ import CheckBox from '../CheckBox/CheckBox';
 import moviesApi from '../../utils/api/MoviesApi';
 
 import styles from './SearchForm.scss';
+import SavedMovies from '../../pages/SavedMovies/SavedMovies';
 
 function SearchForm({
   setMovies,
@@ -22,7 +23,6 @@ function SearchForm({
 
   const handleSearch = (e) => {
     setSearchValue(e.target.value);
-    console.log(e.target.value);
   };
 
   const resetErrors = useCallback(() => {
@@ -30,6 +30,7 @@ function SearchForm({
   }, []);
 
   const searchMovies = () => {
+    setFetchMoviesError(false);
     if (isSavedMovies) {
       searchInSavedMovies();
     } else {
@@ -51,7 +52,8 @@ function SearchForm({
   };
 
   const searchInSavedMovies = () => {
-    setSavedMovies(moviesFilterer(movies, searchValue, shortFilmChecked));
+    console.log(movies);
+    setMoviesToShow(moviesFilterer(movies, searchValue, shortFilmChecked));
   };
 
   const handleMoviesSearch = (e) => {
@@ -65,19 +67,21 @@ function SearchForm({
     }
   };
 
-  useEffect(() => {
-    if (isSavedMovies) {
-    } else {
-      const filteredMovies = moviesFilterer(movies, searchValue, shortFilmChecked);
-      localStorage.setItem('moviesToShow', JSON.stringify(filteredMovies));
-      setMoviesToShow(filteredMovies);
-    }
-  }, [shortFilmChecked]);
-
   const handleShortFilmChange = () => {
-    localStorage.setItem('shortFilmChecked', JSON.stringify(!shortFilmChecked));
-    //console.log(shortFilmChecked, JSON.parse(localStorage.getItem('shortFilmChecked')));
-    setShortFilmChecked(!shortFilmChecked);
+    const movies = JSON.parse(localStorage.getItem('movies'));
+    if (movies) {
+      localStorage.setItem('shortFilmChecked', JSON.stringify(!shortFilmChecked));
+      setShortFilmChecked(!shortFilmChecked);
+
+      if (isSavedMovies) {
+        searchInSavedMovies();
+      } else {
+        const filteredMovies = moviesFilterer(movies, searchValue, shortFilmChecked);
+        localStorage.setItem('moviesToShow', JSON.stringify(filteredMovies));
+        setMoviesToShow(filteredMovies);
+        console.log('filter', filteredMovies);
+      }
+    }
   };
 
   useEffect(() => {
@@ -92,7 +96,6 @@ function SearchForm({
       localStorage.getItem('searchValue') && setSearchValue(localStorage.getItem('searchValue'));
       setMoviesToShow(JSON.parse(localStorage.getItem('moviesToShow')));
     }
-    console.log('UE', JSON.parse(localStorage.getItem('shortFilmChecked')));
     setShortFilmChecked(JSON.parse(localStorage.getItem('shortFilmChecked')));
   }, []);
 

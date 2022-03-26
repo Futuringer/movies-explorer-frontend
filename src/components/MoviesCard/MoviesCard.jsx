@@ -9,7 +9,7 @@ import api from '../../utils/api/MainApi';
 
 import styles from './MoviesCard.scss';
 
-function MoviesCard({ movie, isSaved, savedMovies, setSavedMovies }) {
+function MoviesCard({ movie, isSaved, savedMovies, setSavedMovies, setMoviesToShow }) {
   const [isLiked, setIsLiked] = useState(false);
   const likeButtonImage = isLiked ? heartFilled : heart;
 
@@ -20,17 +20,17 @@ function MoviesCard({ movie, isSaved, savedMovies, setSavedMovies }) {
     } else {
       setIsLiked(true);
       api.saveMovie({
-        country: movie.country,
-        director: movie.director,
-        duration: movie.duration,
-        year: movie.year,
-        description: movie.description,
+        country: movie.country || 'country',
+        director: movie.director || 'director',
+        duration: movie.duration || 'duration',
+        year: movie.year || 'year',
+        description: movie.description || 'description',
         image: `https://api.nomoreparties.co${movie.image.url}`,
         trailerLink: movie.trailerLink,
         thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
         movieId: movie.id,
-        nameRU: movie.nameRU,
-        nameEN: movie.nameEN,
+        nameRU: movie.nameRU || 'nameRU',
+        nameEN: movie.nameEN || 'nameEN',
       });
     }
   };
@@ -38,23 +38,24 @@ function MoviesCard({ movie, isSaved, savedMovies, setSavedMovies }) {
   const handleDeleteClick = () => {
     api.deleteMovie(movie._id);
     setSavedMovies(savedMovies.filter((item) => item._id !== movie._id));
-    console.log(1,savedMovies,2, movie);
+    setMoviesToShow(savedMovies.filter((item) => item._id !== movie._id));
   };
 
   useEffect(() => {
     if (!isSaved && checkIfSaved(movie, savedMovies)) {
       setIsLiked(true);
     }
-    
   }, []);
 
   return (
     <div className="card">
-      <img
-        className="card__image"
-        src={isSaved ? movie.image : `https://api.nomoreparties.co${movie.image.url}`}
-        alt="1"
-      />
+      <a href={movie.trailerLink} target='_blank'>
+        <img
+          className="card__image"
+          src={isSaved ? movie.image : `https://api.nomoreparties.co${movie.image.url}`}
+          alt="1"
+        />
+      </a>
       <div className="card__description">
         <div className="card__title-container">
           <h2 className="card__title">{movie.nameRU}</h2>
