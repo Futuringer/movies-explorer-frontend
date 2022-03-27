@@ -1,4 +1,14 @@
 import { useState, useEffect } from 'react';
+import {
+  MOBILE_MEDIA_BREAK,
+  LAPTOP_MEDIA_BREAK,
+  MOBILE_INITIAL_CARDS,
+  MOBILE_CARDS_TO_LOAD,
+  LAPTOP_INITIAL_CARDS,
+  LAPTOP_CARDS_TO_LOAD,
+  DESKTOP_INITIAL_CARDS,
+  DESKTOP_CARDS_TO_LOAD
+} from '../constants';
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -6,20 +16,20 @@ function getWindowDimensions() {
   let initialNumberOfCards;
 
   switch (true) {
-    case width > 768:
-      cardsToLoad = 3;
-      initialNumberOfCards = 12;
+    case width > LAPTOP_MEDIA_BREAK:
+      cardsToLoad = DESKTOP_CARDS_TO_LOAD;
+      initialNumberOfCards = DESKTOP_INITIAL_CARDS;
       break;
-    case  width <= 320:
-      cardsToLoad = 2;
-      initialNumberOfCards = 5;
+    case width <= MOBILE_MEDIA_BREAK:
+      cardsToLoad = MOBILE_CARDS_TO_LOAD;
+      initialNumberOfCards = MOBILE_INITIAL_CARDS;
       break;
     default:
-      cardsToLoad = 2;
-      initialNumberOfCards = 8;
+      cardsToLoad = LAPTOP_CARDS_TO_LOAD;
+      initialNumberOfCards = LAPTOP_INITIAL_CARDS;
   }
 
-  return [initialNumberOfCards, cardsToLoad]
+  return [initialNumberOfCards, cardsToLoad];
 }
 
 export default function useViewport() {

@@ -67,7 +67,11 @@ function App() {
   return (
     <CurrentUserContext.Provider value={actualUser}>
       <Routes>
-        <Route exact path={'*'}  element={<NotFound loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}></Route>
+        <Route
+          exact
+          path={'*'}
+          element={<NotFound loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+        ></Route>
         <Route
           exact
           path={LINKS.MAIN}
@@ -107,31 +111,39 @@ function App() {
                 savedMovies={savedMovies}
                 setSavedMovies={setSavedMovies}
                 setMoviesToShow={setMoviesToShow}
+                setFetchMoviesError={setFetchMoviesError}
               />
             }
           ></Route>
         </Route>
-          
-        <Route
-          path={LINKS.PROFILE}
-          element={
-            <Profile
-              loggedIn={loggedIn}
-              openPopup={handleOpenMenuPopup}
-              handleLogout={handleLogout}
-              setActualUser={setActualUser}
-            />
-          }
-        ></Route>
 
-        <Route
-          path={LINKS.SIGN_UP}
-          element={<Register setLoggedIn={setLoggedIn} setActualUser={setActualUser} />}
-        ></Route>
-        <Route
-          path={LINKS.SIGN_IN}
-          element={<Login setLoggedIn={setLoggedIn} setActualUser={setActualUser} />}
-        ></Route>
+        <Route path={LINKS.PROFILE} element={<ProtectedRoute loggedIn={loggedIn} />}>
+          <Route
+            path={LINKS.PROFILE}
+            element={
+              <Profile
+                loggedIn={loggedIn}
+                openPopup={handleOpenMenuPopup}
+                handleLogout={handleLogout}
+                setActualUser={setActualUser}
+              />
+            }
+          ></Route>
+        </Route>
+
+        <Route path={LINKS.SIGN_UP} element={<ProtectedRoute reversed loggedIn={loggedIn} />}>
+          <Route
+            path={LINKS.SIGN_UP}
+            element={<Register setLoggedIn={setLoggedIn} setActualUser={setActualUser} />}
+          ></Route>
+        </Route>
+
+        <Route path={LINKS.SIGN_IN} element={<ProtectedRoute reversed loggedIn={loggedIn} />}>
+          <Route
+            path={LINKS.SIGN_IN}
+            element={<Login setLoggedIn={setLoggedIn} setActualUser={setActualUser} />}
+          ></Route>
+        </Route>
       </Routes>
       <NavigationPopup isOpen={menuPopupIsOpen} closeMenu={handleCloseMenuPopup}></NavigationPopup>
     </CurrentUserContext.Provider>

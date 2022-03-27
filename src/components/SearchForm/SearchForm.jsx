@@ -59,6 +59,7 @@ function SearchForm({
     e.preventDefault();
     e.stopPropagation();
     if (searchValue?.length) {
+      searchInSavedMovies();
       searchMovies();
     } else {
       setEmptyError(true);

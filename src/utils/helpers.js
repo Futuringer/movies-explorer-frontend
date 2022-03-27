@@ -1,3 +1,5 @@
+import { SHORT_MOVIES_DURATION } from "./constants";
+
 export const durationParser = (minutes) => {
   return `${Math.floor(minutes / 60)}ч ${minutes % 60}м`;
 };
@@ -7,7 +9,7 @@ export const moviesFilterer = (movies, search, shortFilms) => {
   movies.forEach((movie) => {
     const allTextFieldsArray = `${movie.country} ${movie.description} ${movie.director} ${movie.nameEN} ${movie.nameRU}`.toLowerCase();
     if (allTextFieldsArray.includes(search.toLowerCase())) {
-      if ((shortFilms && movie.duration > 40) || !shortFilms) {
+      if ((shortFilms && movie.duration > SHORT_MOVIES_DURATION) || !shortFilms) {
         filteredMovies.push(movie);
       }
     }

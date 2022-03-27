@@ -13,6 +13,7 @@ function SavedMovies({
   moviesToShow,
   movies,
   setMoviesToShow,
+  setFetchMoviesError,
   ...restProps
 }) {
   useEffect(() => {
@@ -29,6 +30,7 @@ function SavedMovies({
           movies={movies}
           setSavedMovies={setSavedMovies}
           setMoviesToShow={setMoviesToShow}
+          setFetchMoviesError={setFetchMoviesError}
         ></SearchForm>
         <MoviesCardList
           isSavedMovies

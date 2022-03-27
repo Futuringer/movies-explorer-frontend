@@ -7,6 +7,10 @@ body,
   position: relative;
 }
 
+input[type=checkbox] {
+  -moz-appearance:initial
+}
+
 html {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
 }

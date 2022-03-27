@@ -43,7 +43,7 @@ function SignInForm({ setLoggedIn, setActualUser }) {
         });
     },
   });
-  const { values, handleSubmit, errors, setFieldValue } = formik;
+  const { values, handleSubmit, errors, touched, setFieldValue, handleBlur, validateForm } = formik;
 
   const resetErrors = useCallback(() => {
     setApiError('');
@@ -55,6 +55,10 @@ function SignInForm({ setLoggedIn, setActualUser }) {
       document.removeEventListener('click', resetErrors);
     };
   }, [resetErrors]);
+
+  useEffect(()=>{
+    validateForm();
+  },[])
 
   return (
     <form className="sign-in-form" onSubmit={handleSubmit}>
@@ -71,7 +75,8 @@ function SignInForm({ setLoggedIn, setActualUser }) {
             value={values.email || initialValues.email}
             required
             setValue={setFieldValue}
-            error={errors.email}
+            error={touched.email && errors.email}
+            onBlur={handleBlur}
           ></FormInput>
         </div>
         <div className="sign-in-form__input-container">
@@ -83,7 +88,8 @@ function SignInForm({ setLoggedIn, setActualUser }) {
             required
             setValue={setFieldValue}
             type="password"
-            error={errors.password}
+            error={touched.password && errors.password}
+            onBlur={handleBlur}
           ></FormInput>
         </div>
       </div>

@@ -3,7 +3,7 @@ import cn from 'classnames';
 
 import styles from './FormInput.scss';
 
-function FormInput({ name, label, placeholder, value, error, required, setValue, type }) {
+function FormInput({ name, label, placeholder, value, error, required, setValue, type, onBlur }) {
   const handleOnChange = (e) => {
     const { value } = e.target;
     setValue(name, value);
@@ -20,6 +20,7 @@ function FormInput({ name, label, placeholder, value, error, required, setValue,
         placeholder={placeholder}
         value={value}
         onChange={handleOnChange}
+        onBlur={onBlur}
       />
       {error && <p className="input__error">{error}</p>}
     </div>
