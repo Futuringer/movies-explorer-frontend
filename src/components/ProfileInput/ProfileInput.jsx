@@ -2,13 +2,14 @@ import React from 'react';
 
 import styles from './ProfileInput.scss';
 
-function ProfileInput({ name, label, value, required, setValue, type }) {
+function ProfileInput({ name, label, value, required, setValue, type, error }) {
   const handleOnChange = (e) => {
     const { value } = e.target;
     setValue(name, value);
   };
 
   return (
+    <div className="profile-input__container">
       <div className="profile-input">
         <label className="profile-input__label">{label}</label>
         <input
@@ -19,6 +20,8 @@ function ProfileInput({ name, label, value, required, setValue, type }) {
           value={value}
           onChange={handleOnChange}
         />
+      </div>
+      {error && <div className="profile-input__error">{error}</div>}
     </div>
   );
 }

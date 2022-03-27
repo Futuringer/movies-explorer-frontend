@@ -7,7 +7,7 @@ function Profile({ loggedIn, openPopup, ...restProps }) {
   return (
     <Layout loggedIn={loggedIn} noFooter openPopup={openPopup}>
       <div className="profile-container">
-        <ProfileForm></ProfileForm>
+        <ProfileForm {...restProps}></ProfileForm>
       </div>
     </Layout>
   );

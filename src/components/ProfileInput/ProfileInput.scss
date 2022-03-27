@@ -33,4 +33,17 @@
     white-space: nowrap;
     min-width: 140px;
   }
+
+  &__error {
+    width: 100%;
+    position: absolute;
+    text-align: right;
+    font-size: 11px;
+    line-height: 13px;
+    color: $colors-main-3;
+  }
+}
+
+.profile-input__container{
+  position: relative;
 }
